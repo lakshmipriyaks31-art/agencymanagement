@@ -2,3 +2,7 @@
 *.env
 */coverage
 */env
+server/env
+/server/env
+server/env/.env.local
+env
