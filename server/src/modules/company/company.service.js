@@ -3,23 +3,24 @@ const { generatepassword ,comparePassword} = require("../../utils/bcypt")
 const { generateAccessToken, generateRefreshToken } = require("../../utils/jwttoken")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
+const { Conflict, badRequest, Unauthorized, slugConflict, failedToUpdate, unauthoizedUser } = require("../../config/env")
 
 exports.add =  async(data)=>{
   
-        const {companyname ,slug,owner,address, mobile } = data
+        const {slug } = data
         data.slug = String(slug).toLowerCase().trim().replaceAll(" ", "")
         let company = await companySchema.findOne({
             slug:data.slug ,isDeleted:false
         }).select('slug')
-        if (company)  throw new AppError("slug already exists",400)
+        if (company)  throw new AppError(slugConflict,Conflict,[{slug:slugConflict}])
         company = new companySchema(data)
         return await company.save()
 }
 
 
 exports.profile = async(data)=>{
-    let id = data
-    var result =await companySchema.findOne({_id:id,isDeleted:false})
+    let _id = data
+    var result =await companySchema.findOne({_id:_id,isDeleted:false})
                 .populate({
                         path: "products",
                         select:'productname code item',
@@ -31,26 +32,31 @@ exports.profile = async(data)=>{
 }
 exports.listcompanies = async()=>{
    var result =await companySchema.find({isDeleted:false}).select('companyname mobile owner slug').sort('-createdAt')
-   console.log("result",result)
-   return result
+    return result
     
 }
 
 exports.edit =  async(data,_id)=>{
        const {slug } = data
-        var result =await companySchema.findOne({id:{$ne:id},slug,isDeleted:false})
-          if(result) throw new AppError("Slug is Already Exist",409 )
+        var result =await companySchema.findOne({
+            slug,
+            _id:{$ne:_id},
+            isDeleted:false
+        })
+        
+        console.log("edit in company",result,slug,_id)
+        if(result) throw new AppError(slugConflict,Conflict,[{"slug":slugConflict}] )
         data.slug = String(slug).toLowerCase().trim().replaceAll(" ", "")
-           let company = await companySchema.findOneAndUpdate(
+        let company = await companySchema.findOneAndUpdate(
         {
-            _id
+            _id:_id
         },
         {$set:
             data
         },
         {new:true} ).select('companyname mobile password role')
-        if (!company)  throw new AppError("Failed to update",400)
-         return company
+        if (!company)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
+        return company
 }
 
 exports.delete =  async(_id)=>{
@@ -62,9 +68,9 @@ exports.delete =  async(_id)=>{
             {$set:
                 {isDeleted:true}
             },
-            {new:true}
+            {after:true}
         )
         console.log(`data fetched ${JSON.stringify(company)}`)
-        if (!company)  throw new AppError("Unauthorized user",409 )
+        if (!company)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

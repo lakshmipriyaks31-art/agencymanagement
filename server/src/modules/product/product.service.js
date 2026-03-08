@@ -2,6 +2,7 @@ const productSchema = require("./product.model")
 const companySchema = require("./../company/company.model")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
+const { Conflict, badRequest, Unauthorized, productConflict, unauthoizedUser, failedToUpdate } = require("../../config/env")
 
 exports.add =  async(data)=>{
         let product = await productSchema.findOne({
@@ -9,7 +10,7 @@ exports.add =  async(data)=>{
             companySlug:data.companySlug ,
             isDeleted:false
         }).select('code')
-        if (product)  throw new AppError("Product already exists",400)
+        if (product)  throw new AppError(productConflict,Conflict,[{"code":productConflict}])
         product = new productSchema(data)
         return await product.save()
     }
@@ -23,14 +24,13 @@ exports.profile = async(data)=>{
 }
 exports.listcompanies = async()=>{
    var result =await productSchema.find({isDeleted:false}).select('-isDeleted').sort('-createdAt')
-   console.log("result",result)
    return result
     
 }
 
 exports.edit =  async(data,_id)=>{
-        var result =await productSchema.findOne({_id:{$ne:id},code:data.code,isDeleted:false})
-                if(result) throw new AppError("Code is Already Exist",409 )
+        var result =await productSchema.findOne({_id:{$ne:_id},code:data.code,isDeleted:false})
+                if(result) throw new AppError(productConflict,Conflict,[{"code":productConflict}])
          let product = await productSchema.findOneAndUpdate(
         {
             _id
@@ -39,7 +39,7 @@ exports.edit =  async(data,_id)=>{
             data
         },
         {new:true} ).select('-isDeleted')
-        if (!product)  throw new AppError("Failed to update",400)
+        if (!product)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
          return product
 }
 
@@ -55,6 +55,6 @@ exports.delete =  async(_id)=>{
             {new:true}
         )
         console.log(`data fetched ${JSON.stringify(product)}`)
-        if (!product)  throw new AppError("Unauthorized user",409 )
+        if (!product)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

@@ -9,6 +9,8 @@ const orderRoutes= require('./modules/order/order.routes');
 
 const errorMiddleware = require('./middleware/error.middleware');
 const cookieParser = require("cookie-parser");
+const { rateLimitMiddleware } = require('./middleware/rateLimit.middleware');
+const { clientApi, companyApi, productApi, orderApi } = require('./config/env');
 const app = express();
 
 /* -------------------- Global Middlewares -------------------- */
@@ -26,6 +28,8 @@ app.use(
     },
   })
 );
+app.use(rateLimitMiddleware);
+
 app.use(cookieParser());
 /* -------------------- Basic route Check -------------------- */
 
@@ -36,10 +40,10 @@ app.get('/', (req, res) => {
 /* -------------------- Routes -------------------- */
 
 app.use('/api/admin', adminRoutes);
-app.use('/api/company', companyRoutes);
-app.use('/api/product', productRoutes);
-app.use('/api/client', clientRoutes);
-app.use('/api/order', orderRoutes);
+app.use(companyApi, companyRoutes);
+app.use(productApi, productRoutes);
+app.use(clientApi, clientRoutes);
+app.use(orderApi, orderRoutes);
 
 
 

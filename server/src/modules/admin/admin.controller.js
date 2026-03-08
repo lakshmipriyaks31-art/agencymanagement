@@ -41,7 +41,7 @@ exports.logout = async (req, res) => {
  const result = await adminService.logout(req.admin?.adminid?.id, req.cookies.refreshToken);
  res.clearCookie("accessToken")
  res.clearCookie("refreshToken")
- ApiResponse.success(res, result, 'Admin Logout successfully', 200);
+ ApiResponse.success(res, result, 'Admin Logout successfully', config.ok);
 }
 
 exports.login = async (req, res) => {
@@ -59,25 +59,20 @@ exports.login = async (req, res) => {
               sameSite: "strict",
               maxAge: 7 * 24 * 60 * 60 * 1000
             });
-  ApiResponse.success(res, token, 'Admin login successfully', 200);
+  ApiResponse.success(res, token, 'Admin login successfully', config.ok);
 } 
 
 exports.profile = async(req,res) => {
   const result =await adminService.profile(req.params.id)
-  console.log("result",result,req.admin)
   if(!result){
          res.clearCookie("accessToken")
-         throw new AppError('Unauthorised',401)
+         throw new AppError('Unauthorised',config.Unauthorized,{error:'Unauthorised'})
         }
-  else ApiResponse.success(res,result,'Authorised',200)
+  else ApiResponse.success(res,result,'Authorised',config.ok)
 }
 
 
 exports.list = async(req,res) => {
-  console.log("req.admin",req.admin.adminid?.role,config.accessRole)
-  if(req.admin?.adminid?.role == config.accessRole){
       const result =await adminService.fetchalladmin()
-      return ApiResponse.success(res,result,'Authorised',200)
-  }
-  else  throw new AppError('Unauthorised',401)
-}
+      return ApiResponse.success(res,result,'Authorised',config.ok)
+ }

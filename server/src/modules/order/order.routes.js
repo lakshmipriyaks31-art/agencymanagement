@@ -11,6 +11,7 @@ const authController = require('../../middleware/auth.middleware')
 
 //register order module
 route.post("/",
+     authController,
      addValidation,
      validate,
      asyncHandler(orderController.add)

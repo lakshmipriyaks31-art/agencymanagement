@@ -1,1 +1,0 @@
-const check = require('./tests/setup')

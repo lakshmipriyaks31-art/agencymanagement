@@ -11,6 +11,7 @@ const authController = require('../../middleware/auth.middleware')
 
 //register company module
 route.post("/",
+     authController,
      addValidation,
      validate,
      asyncHandler(companyController.add)

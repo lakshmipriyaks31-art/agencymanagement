@@ -19,6 +19,8 @@ exports.verifyAccessToken = (token) => {
 };
 
 exports.verifyRefreshToken = (token) => {
-  return decryptCrypto(jwt.verify(token, config.jwtrefreshSecret));
+   token =decryptCrypto(token)
+  return jwt.verify(token, config.jwtrefreshSecret)
+   
 };
 

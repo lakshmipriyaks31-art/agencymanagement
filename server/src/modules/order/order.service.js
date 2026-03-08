@@ -2,6 +2,7 @@ const orderSchema = require("./order.model")
 const companySchema = require("../company/company.model")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
+const { badRequest, Unauthorized, failedToUpdate, unauthoizedUser } = require("../../config/env")
 
 exports.add =  async(data)=>{
         data.orderId = await orderSchema.find({}).sort({ _id: -1 }).limit(1)
@@ -59,7 +60,7 @@ exports.edit =  async(data,_id)=>{
             data
         },
         {new:true} ).select('-isDeleted')
-        if (!order)  throw new AppError("Failed to update",400)
+        if (!order)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
          return order
 }
 
@@ -74,7 +75,6 @@ exports.delete =  async(_id)=>{
             },
             {new:true}
         )
-        console.log(`data fetched ${JSON.stringify(order)}`)
-        if (!order)  throw new AppError("Unauthorized user",409 )
+        if (!order)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

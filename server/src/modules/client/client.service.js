@@ -3,6 +3,7 @@ const { generatepassword ,comparePassword} = require("../../utils/bcypt")
 const { generateAccessToken, generateRefreshToken } = require("../../utils/jwttoken")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
+const { Conflict, badRequest, Unauthorized, mobileConflict, failedToUpdate, unauthoizedUser } = require("../../config/env")
 
 exports.add =  async(data)=>{
   
@@ -10,14 +11,14 @@ exports.add =  async(data)=>{
         let client = await clientSchema.findOne({
            mobile,isDeleted:false
         })
-        if (client)  throw new AppError("slug already exists",400)
+        if (client)  throw new AppError(mobileConflict,Conflict,[{mobile:mobileConflict}])
         client = new clientSchema(data)
         return await client.save()
 }
 
 
-exports.profile = async(data)=>{
-    let id = data
+exports.profile = async(id)=>{
+                console.log("dadadadasdas",id)
     
     var result =await clientSchema.findOne({_id:id,isDeleted:false})
                 // .populate({
@@ -26,6 +27,7 @@ exports.profile = async(data)=>{
                 //         options: { sort: { createdAt: -1 } }}
                 //   )
                 .select('-isDeleted');
+                console.log("dadadadasdas",result)
     return result
     
 }
@@ -40,7 +42,7 @@ exports.edit =  async(data,_id)=>{
      let mobileExist = await clientSchema.findOne({
            mobile:data.mobile,isDeleted:false,_id:{$ne:_id}
         })
-        if(mobileExist) throw new AppError("Mobile Number Already Exist",409 )
+         if(mobileExist) throw new AppError(mobileConflict,Conflict,[{"mobile":mobileConflict}] )
          let client = await clientSchema.findOneAndUpdate(
         {
             _id,
@@ -50,7 +52,7 @@ exports.edit =  async(data,_id)=>{
             data
         },
         {new:true} ).select('clientname mobile password role')
-        if (!client)  throw new AppError("Failed to update",400)
+        if (!client)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
          return client
 }
 
@@ -65,7 +67,6 @@ exports.delete =  async(_id)=>{
             },
             {new:true}
         )
-        console.log(`data fetched ${JSON.stringify(client)}`)
-        if (!client)  throw new AppError("Unauthorized user",409 )
+        if (!client)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

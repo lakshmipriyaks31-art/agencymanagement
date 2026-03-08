@@ -1,13 +1,32 @@
-import mongoose from "mongoose";
-import { connectDB } from "../../../src/config/db.js";
-
+const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const config = require('../src/config/env')
+let mongoServer;
+jest.setTimeout(30000); // 30 seconds
 beforeAll(async () => {
-  process.env.NODE_ENV = "test";
-  await connectDB();
+
+  mongoServer = await MongoMemoryServer.create();
+
+  const uri = mongoServer.getUri();
+console.log("uri",uri)
+  await mongoose.connect(`${uri}agency`);
+
 });
 
 afterAll(async () => {
+
   await mongoose.connection.close();
+
+  await mongoServer.stop();
+
 });
 
-console.log("setup file is executed")
+afterEach(async () => {
+
+  const collections = mongoose.connection.collections;
+
+  for (const key in collections) {
+    await collections[key].deleteMany();
+  }
+
+});

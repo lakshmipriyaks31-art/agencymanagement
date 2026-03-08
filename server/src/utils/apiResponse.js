@@ -1,6 +1,6 @@
 class ApiResponse {
   static success(res, data, message = 'Success', status = 200) {
-    console.log("res, data, message = 'Success', status = 20", data, message , status )
+    console.log("coming wrong here while got error")
     return res.status(status).json({
       success: true,
       message:JSON.stringify(message),

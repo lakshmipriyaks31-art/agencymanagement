@@ -1,6 +1,6 @@
 const rateLimit = require('express-rate-limit');
 
-const rateLimitMiddleware = rateLimit({
+exports.rateLimitMiddleware = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 100,                 // limit each IP
   message: {
@@ -8,5 +8,3 @@ const rateLimitMiddleware = rateLimit({
     message: 'Too many requests, please try later.',
   },
 });
-
-module.exports = rateLimitMiddleware;

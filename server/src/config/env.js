@@ -13,5 +13,33 @@ module.exports = {
   logLevel: process.env.LOG_LEVEL || 'info',
   clientUrl: process.env.CLIENT_URL,
   cryptoSecret: process.env.CRYPTO_SECRET,
-  accessRole:"admin"
+  accessRole:"admin",
+  badRequest:400,
+  Unauthorized:401,
+  Conflict:409,
+  unprocessable_Entity:422,
+  Created:201,
+  ok:200,
+  notFound:404,
+  ratelimitexeed:429,
+  internalserver:500,
+  serviceNotAvailble:503,
+  deleted:204,
+  mobileRequired:"Mobile Number is required",
+  mobileConflict:"Mobile Number is already exist",
+  unauthoizedUser : "Unauthorized User",
+  unauthoizedToken : "Unauthorized Token",
+  invalidToken:"Invalid or expired token",
+  noUserFound:"No user found",
+  failedToUpdate:"Failed to Update",
+  slugConflict:"slug already exists",
+  productConflict:"Product Code already exists",
+  //api
+  clientApi :"/api/client/",
+  companyApi :"/api/company/",
+  productApi :"/api/product/",
+  orderApi :"/api/order/",
+  
+  
+  commonId:"69abc73f12e5a54548d2b410"
 };

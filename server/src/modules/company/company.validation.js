@@ -6,6 +6,10 @@
     .withMessage('Company Name is required')
     .isLength({ min: 3 })
     .withMessage('Company Name must be at least 3 characters'),
+    body('slug')
+    .notEmpty()
+    .withMessage('Slug is required'),
+
   body('owner')
     .notEmpty()
     .withMessage('Owner Name is required')
@@ -25,6 +29,9 @@
     .withMessage('Company Name is required')
     .isLength({ min: 3 })
     .withMessage('Company Name must be at least 3 characters'),
+    body('slug')
+    .notEmpty()
+    .withMessage('Slug is required'),
   body('owner')
     .notEmpty()
     .withMessage('Owner Name is required')

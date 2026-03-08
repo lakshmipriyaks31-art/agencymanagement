@@ -9,8 +9,9 @@ const authController = require('../../middleware/auth.middleware')
 
 
 
-//register client module
+//add client module
 route.post("/",
+     authController,
      addValidation,
      validate,
      asyncHandler(clientController.add)
