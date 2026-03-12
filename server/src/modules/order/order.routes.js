@@ -29,7 +29,7 @@ route.delete("/:id",
 )
 route.get("/list",
      authController,
-     asyncHandler(orderController.listallorder)
+     asyncHandler(orderController.list)
 )
 
 

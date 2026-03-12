@@ -10,7 +10,7 @@ const orderRoutes= require('./modules/order/order.routes');
 const errorMiddleware = require('./middleware/error.middleware');
 const cookieParser = require("cookie-parser");
 const { rateLimitMiddleware } = require('./middleware/rateLimit.middleware');
-const { clientApi, companyApi, productApi, orderApi } = require('./config/env');
+const { clientApi, companyApi, productApi, orderApi, adminApi } = require('./config/env');
 const app = express();
 
 /* -------------------- Global Middlewares -------------------- */
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 
 /* -------------------- Routes -------------------- */
 
-app.use('/api/admin', adminRoutes);
+app.use(adminApi, adminRoutes);
 app.use(companyApi, companyRoutes);
 app.use(productApi, productRoutes);
 app.use(clientApi, clientRoutes);

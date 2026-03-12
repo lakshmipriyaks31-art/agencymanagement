@@ -34,12 +34,12 @@ module.exports = {
   failedToUpdate:"Failed to Update",
   slugConflict:"slug already exists",
   productConflict:"Product Code already exists",
+  validationError:"Validation errror",
   //api
   clientApi :"/api/client/",
   companyApi :"/api/company/",
   productApi :"/api/product/",
   orderApi :"/api/order/",
-  
-  
-  commonId:"69abc73f12e5a54548d2b410"
+  adminApi :"/api/admin/",
+  commonId:process.env.COMMON_ID
 };

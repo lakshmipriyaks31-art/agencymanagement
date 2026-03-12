@@ -139,7 +139,6 @@ describe("=====COMPANY API======",()=>{
             const res = await request(app)
                         .get(`${companyApi}${createCompany?.id}`)
                         .set("Cookie",cookie)
-                        console.log("retreter",res.body)
             expect(res.statusCode).toBe(ok)
             expect(res.body.success).toBe(true)
 
@@ -155,7 +154,7 @@ describe("=====COMPANY API======",()=>{
                         .patch(`${companyApi}${createCompany?.id}`)
                         .set("Cookie",cookie)
                         .send({...companydata,...{"companyname":"kishan priya"}})
-            console.log("|res",res.body)
+            
             expect(res.statusCode).toBe(Created)
             expect(res.body.success).toBe(true)
 
@@ -196,7 +195,7 @@ describe("=====COMPANY API======",()=>{
                         .patch(`${companyApi}${commonId}`)
                         .set("Cookie",cookie)
                         .send({...companydata,...{"slug":"earnose"}})
-                console.log("resresres",res.body,commonId,createCompany?._id)       
+                   
             expect(res.statusCode).toBe(badRequest)
             expect(res.body.success).toBe(false)
             expect(res.body.errors).toEqual(
@@ -216,7 +215,7 @@ describe("=====COMPANY API======",()=>{
         })
       
     })
-    describe.only(`-------DELETE------\n api:${companyApi}${createCompany?.id}\n method:delete`,()=>{
+    describe(`-------DELETE------\n api:${companyApi}${createCompany?.id}\n method:delete`,()=>{
         test("should Delete Company Details  ",async()=>{
           
             const res = await request(app)

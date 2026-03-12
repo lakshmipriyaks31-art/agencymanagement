@@ -58,7 +58,7 @@ describe("=====PRODUCT API======",()=>{
                         .post(productApi)
                         .set("Cookie",cookie)
                         .send({...productdata,...{"code":"kishan"}})
-                        console.log("___",res.body)
+                        
             expect(res.statusCode).toBe(Created)
             expect(res.body.success).toBe(true)
 
@@ -137,7 +137,7 @@ describe("=====PRODUCT API======",()=>{
             const res = await request(app)
                         .get(`${productApi}${createProduct?.id}`)
                         .set("Cookie",cookie)
-                        console.log("retreter",res.body)
+                       
             expect(res.statusCode).toBe(ok)
             expect(res.body.success).toBe(true)
 
@@ -146,14 +146,14 @@ describe("=====PRODUCT API======",()=>{
         
       
     })
-    describe.only(`-------EDIT------\n api:${productApi}:id\n method:patch`,()=>{
+    describe(`-------EDIT------\n api:${productApi}:id\n method:patch`,()=>{
         test("should Edit Product Details with params ",async()=>{
           
             const res = await request(app)
                         .patch(`${productApi}${createProduct?.id}`)
                         .set("Cookie",cookie)
                         .send({...productdata,...{"productname":"kishan priya"}})
-            console.log("|res",res.body)
+            
             expect(res.statusCode).toBe(Created)
             expect(res.body.success).toBe(true)
 
@@ -194,7 +194,7 @@ describe("=====PRODUCT API======",()=>{
                         .patch(`${productApi}${commonId}`)
                         .set("Cookie",cookie)
                         .send({...productdata,...{"code":"earnose"}})
-                console.log("resresres",res.body,commonId,createProduct?._id)       
+                     
             expect(res.statusCode).toBe(badRequest)
             expect(res.body.success).toBe(false)
             expect(res.body.errors).toEqual(

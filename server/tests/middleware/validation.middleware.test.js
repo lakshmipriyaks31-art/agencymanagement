@@ -1,3 +1,4 @@
+const { Conflict, unprocessable_Entity } = require("../../src/config/env");
 const validationMiddleware = require("../../src/middleware/validation.middleware")
 const { validationResult } = require("express-validator");
 jest.mock("express-validator")
@@ -12,23 +13,23 @@ describe("validation Middleware",()=>{
     validationResult.mockReturnValue({
       isEmpty: () => false,
       array: () => [
-     {"mobile": "mobile is required" },
-        {  "password": "Password is required" }
+        { path: "mobile", msg: "mobile is required" },
+        { path: "password", msg: "Password is required" }
       ]
     });
 
     validationMiddleware(req, res, next);
 
     const errorPassed = next.mock.calls[0][0];
-    // console.log("next.mock",next.mock.calls)
-    expect(errorPassed.errors).toBe(
-    ([
-        {"mobile": "mobile is required" },
-        {  "password": "Password is required" }
+    
+    expect(errorPassed.errors).toEqual(
+      expect.arrayContaining([
+        { mobile: 'mobile is required' },
+      { password: 'Password is required' }
       ])
     );
 
-    expect(errorPassed.statusCode).toBe(400);
+    expect(errorPassed.statusCode).toBe(unprocessable_Entity);
 
     })
     test("should have no validation errors",()=>{

@@ -2,28 +2,34 @@ const productSchema = require("./product.model")
 const companySchema = require("./../company/company.model")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
-const { Conflict, badRequest, Unauthorized, productConflict, unauthoizedUser, failedToUpdate } = require("../../config/env")
+const { Conflict, badRequest, Unauthorized, productConflict, unauthoizedUser, failedToUpdate, notFound } = require("../../config/env")
 
 exports.add =  async(data)=>{
         let product = await productSchema.findOne({
             code:data.code,
             companySlug:data.companySlug ,
             isDeleted:false
-        }).select('code')
+        })
         if (product)  throw new AppError(productConflict,Conflict,[{"code":productConflict}])
         product = new productSchema(data)
         return await product.save()
-    }
+}
 
 
 exports.profile = async(data)=>{
     let id = data
-    var result =await productSchema.findOne({_id:id,isDeleted:false}).select('-isDeleted')
+    var result =await productSchema
+                .findOne({_id:id,isDeleted:false})
+                .select('-isDeleted')
+    if (!result)  throw new AppError("Product not found",notFound,[{error:"Product not found"}])
     return result
     
 }
-exports.listcompanies = async()=>{
-   var result =await productSchema.find({isDeleted:false}).select('-isDeleted').sort('-createdAt')
+exports.list = async()=>{
+   var result =await productSchema
+                .find({isDeleted:false})
+                .select('-isDeleted')
+                .sort('-createdAt')
    return result
     
 }
@@ -38,7 +44,7 @@ exports.edit =  async(data,_id)=>{
         {$set:
             data
         },
-        {new:true} ).select('-isDeleted')
+        {upsert:true} ).select('-isDeleted')
         if (!product)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
          return product
 }
@@ -52,9 +58,9 @@ exports.delete =  async(_id)=>{
             {$set:
                 {isDeleted:true}
             },
-            {new:true}
+            {upsert:true}
         )
-        console.log(`data fetched ${JSON.stringify(product)}`)
+       
         if (!product)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

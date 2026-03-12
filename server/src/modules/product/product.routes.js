@@ -30,7 +30,7 @@ route.delete("/:id",
 )
 route.get("/list",
      authController,
-     asyncHandler(productController.listallproduct)
+     asyncHandler(productController.list)
 )
 
 

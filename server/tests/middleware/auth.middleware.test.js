@@ -19,7 +19,7 @@ describe("Auth Middleware",()=>{
     authMiddleware(req, res, next);
 
     expect(next).toHaveBeenCalled();
-    expect(next.mock.calls[0][0].message).toBe(unauthoizedUser);
+    expect(next.mock.calls[0][0].message).toBe(invalidToken);
 
   });
 

@@ -2,11 +2,14 @@ const orderSchema = require("./order.model")
 const companySchema = require("../company/company.model")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
-const { badRequest, Unauthorized, failedToUpdate, unauthoizedUser } = require("../../config/env")
+const { badRequest, Unauthorized, failedToUpdate, unauthoizedUser, notFound } = require("../../config/env")
 
 exports.add =  async(data)=>{
-        data.orderId = await orderSchema.find({}).sort({ _id: -1 }).limit(1)
-        console.log("data.orderId",data.orderId)
+        data.orderId = await orderSchema
+                        .find({})
+                        .sort({ _id: -1 })
+                        .limit(1)
+
         data.orderId=data.orderId[0]?.orderId?Number(data.orderId[0].orderId)+1:0
         let order = new orderSchema(data)
         return await order.save()
@@ -31,6 +34,7 @@ exports.profile = async(id)=>{
                     })
                 .select('-isDeleted')
     // var products = await productSchema.find()
+    if (!result)  throw new AppError("Order not found",notFound,[{error:"Order not found"}])
     return result
     
 }
@@ -46,8 +50,9 @@ exports.list = async()=>{
                         select:'clientname address mobile',
                         options: { sort: { createdAt: -1 } }}
                   ).select('-isDeleted').sort('-createdAt')
-   console.log("result",result)
-   return result
+  
+   
+    return result
     
 }
 
@@ -59,7 +64,7 @@ exports.edit =  async(data,_id)=>{
         {$set:
             data
         },
-        {new:true} ).select('-isDeleted')
+        {upsert:true} ).select('-isDeleted')
         if (!order)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
          return order
 }
@@ -73,7 +78,7 @@ exports.delete =  async(_id)=>{
             {$set:
                 {isDeleted:true}
             },
-            {new:true}
+            {upsert:true}
         )
         if (!order)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"

@@ -9,8 +9,8 @@ const authController = require('./../../middleware/auth.middleware')
 const { adminRoleAuth } = require("../../middleware/roleAuth.middleware")
 
 router.get("/",
-     // authController,
-     // adminRoleAuth,
+     authController,
+     adminRoleAuth,
      asyncHandler(adminController.list)
 )
 //register admin module

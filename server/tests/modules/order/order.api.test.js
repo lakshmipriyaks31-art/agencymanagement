@@ -78,7 +78,7 @@ describe("=====ORDER API======",()=>{
                         .post(orderApi)
                         .set("Cookie",cookie)
                         .send({...orderdata,...{"code":"kishan"}})
-                        console.log("___",res.body)
+                       
             expect(res.statusCode).toBe(Created)
             expect(res.body.success).toBe(true)
 
@@ -143,7 +143,7 @@ describe("=====ORDER API======",()=>{
             const res = await request(app)
                         .get(`${orderApi}${createOrder?.id}`)
                         .set("Cookie",cookie)
-                        console.log("retreter",res.body)
+            console.log("___",JSON.stringify(res.body.data))                        
             expect(res.statusCode).toBe(ok)
             expect(res.body.success).toBe(true)
 
@@ -159,7 +159,7 @@ describe("=====ORDER API======",()=>{
                         .patch(`${orderApi}${createOrder?.id}`)
                         .set("Cookie",cookie)
                         .send({...orderdata,...{"ordername":"kishan priya"}})
-            console.log("|res",res.body)
+            
             expect(res.statusCode).toBe(Created)
             expect(res.body.success).toBe(true)
 
@@ -184,7 +184,7 @@ describe("=====ORDER API======",()=>{
                         .patch(`${orderApi}${commonId}`)
                         .set("Cookie",cookie)
                         .send({...orderdata})
-                console.log("resresres",res.body,commonId,createOrder?._id)       
+                     
             expect(res.statusCode).toBe(badRequest)
             expect(res.body.success).toBe(false)
             expect(res.body.errors).toEqual(

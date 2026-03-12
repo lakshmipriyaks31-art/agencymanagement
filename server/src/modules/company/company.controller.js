@@ -18,12 +18,12 @@ exports.delete = async (req, res) => {
 
 
 exports.profile = async(req,res) => {
-  const result =await companyService.profile(req.params.id)
+  const result =await companyService.profile(req?.params?.id)
   ApiResponse.success(res,result,'Listed Successfully',config.ok)
 }
 
 
-exports.listallcompany = async(req,res) => {
-       const result =await companyService.listcompanies()
+exports.list = async(req,res) => {
+       const result =await companyService.list()
       return ApiResponse.success(res,result,'Listed Successfully',config.ok)
  }

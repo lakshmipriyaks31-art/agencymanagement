@@ -1,7 +1,7 @@
 const logger = require('../config/logger');
 
 const errorMiddleware = (err, req, res,next) => {
-  console.log("ERROR MIDDLEWARE HIT",res.errors,res.message);
+  
 
 //  logger.error({
 //     message: err.message,

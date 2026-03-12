@@ -18,15 +18,12 @@ exports.delete = async (req, res) => {
 
 
 exports.profile = async(req,res) => {
-  console.log("req.params",req.params)
-  const result =await clientService.profile(req.params.id)
-  console.log("req.params result",result)
-
-  ApiResponse.success(res,result,'Authorised',config.ok)
+  const result =await clientService.profile(req?.params?.id)
+   ApiResponse.success(res,result,'Authorised',config.ok)
 }
 
 
-exports.listallclient = async(req,res) => {
-       const result =await clientService.listcompanies()
+exports.list = async(req,res) => {
+       const result =await clientService.list()
       return ApiResponse.success(res,result,'Authorised', config.ok)
  }

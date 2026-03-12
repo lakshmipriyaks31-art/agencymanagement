@@ -3,7 +3,7 @@ const { generatepassword ,comparePassword} = require("../../utils/bcypt")
 const { generateAccessToken, generateRefreshToken } = require("../../utils/jwttoken")
 const AppError = require("../../utils/appError")
 const logger = require("../../config/logger")
-const { Conflict, badRequest, Unauthorized, slugConflict, failedToUpdate, unauthoizedUser } = require("../../config/env")
+const { Conflict, badRequest, Unauthorized, slugConflict, failedToUpdate, unauthoizedUser, noUserFound, notFound } = require("../../config/env")
 
 exports.add =  async(data)=>{
   
@@ -11,7 +11,7 @@ exports.add =  async(data)=>{
         data.slug = String(slug).toLowerCase().trim().replaceAll(" ", "")
         let company = await companySchema.findOne({
             slug:data.slug ,isDeleted:false
-        }).select('slug')
+        })
         if (company)  throw new AppError(slugConflict,Conflict,[{slug:slugConflict}])
         company = new companySchema(data)
         return await company.save()
@@ -27,10 +27,11 @@ exports.profile = async(data)=>{
                         options: { sort: { createdAt: -1 } }}
                   )
                 .select('-isDeleted');
+    if (!result)  throw new AppError(noUserFound,notFound,[{error:noUserFound}])
     return result
     
 }
-exports.listcompanies = async()=>{
+exports.list = async()=>{
    var result =await companySchema.find({isDeleted:false}).select('companyname mobile owner slug').sort('-createdAt')
     return result
     
@@ -44,7 +45,7 @@ exports.edit =  async(data,_id)=>{
             isDeleted:false
         })
         
-        console.log("edit in company",result,slug,_id)
+       
         if(result) throw new AppError(slugConflict,Conflict,[{"slug":slugConflict}] )
         data.slug = String(slug).toLowerCase().trim().replaceAll(" ", "")
         let company = await companySchema.findOneAndUpdate(
@@ -54,7 +55,7 @@ exports.edit =  async(data,_id)=>{
         {$set:
             data
         },
-        {new:true} ).select('companyname mobile password role')
+        {upsert:true} ).select('companyname mobile password role')
         if (!company)  throw new AppError(failedToUpdate,badRequest,[{error:failedToUpdate}])
         return company
 }
@@ -68,9 +69,9 @@ exports.delete =  async(_id)=>{
             {$set:
                 {isDeleted:true}
             },
-            {after:true}
+            {upsert:true}
         )
-        console.log(`data fetched ${JSON.stringify(company)}`)
+       
         if (!company)  throw new AppError(unauthoizedUser,Unauthorized,[{error:unauthoizedUser}] )
         return "ok"
 }

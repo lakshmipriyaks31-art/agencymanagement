@@ -43,7 +43,7 @@ describe("=====CLIENT API======",()=>{
             expect(res.body.success).toBe(true)
 
         })
-         test("should throw validation error while create client ",async()=>{
+        test("should throw validation error while create client ",async()=>{
             const res = await request(app)
                         .post(clientApi)
                         .set("Cookie",cookie)
@@ -120,7 +120,7 @@ describe("=====CLIENT API======",()=>{
             const res = await request(app)
                         .get(`${clientApi}${createClient.id}`)
                         .set("Cookie",cookie)
-                        console.log("retreter",res.body)
+                       
             expect(res.statusCode).toBe(ok)
             expect(res.body.success).toBe(true)
 
@@ -179,7 +179,7 @@ describe("=====CLIENT API======",()=>{
                         .patch(`${clientApi}${commonId}`)
                         .set("Cookie",cookie)
                         .send({...clientdata,...{"mobile":"1231231231"}})
-                console.log("resresres",res.body,commonId,createClient._id)       
+ 
             expect(res.statusCode).toBe(badRequest)
             expect(res.body.success).toBe(false)
             expect(res.body.errors).toEqual(
