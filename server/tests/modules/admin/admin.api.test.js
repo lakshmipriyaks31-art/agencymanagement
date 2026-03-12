@@ -128,9 +128,9 @@ describe("Admin Api",()=>{
                         .get(`${adminApi}profile/${commonId}`)
                         .set("Cookie",cookie)
                         
-            expect(res.statusCode).toBe(Unauthorized);
+            expect(res.statusCode).toBe(notFound);
             expect(res.body.success).toBe(false);
-            expect(res.body.message).toBe(unauthoizedUser);
+            expect(res.body.message).toBe(noUserFound);
         });
         test(`should throw invalid or expired token while get all admin values ${adminApi}`, async () => {
             const res = await request(app)
