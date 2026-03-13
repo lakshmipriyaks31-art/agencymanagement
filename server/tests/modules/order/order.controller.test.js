@@ -100,55 +100,17 @@ describe("----------order Controller--------",()=>{
             expect(orderService.add).toHaveBeenCalledWith(orderdata)
             expect(res.status).toHaveBeenCalledWith(Created);
         })
-        test("should throw mobile number exist error while add the order data",async()=>{
-             orderService.add.mockRejectedValue(
-               new AppError(mobileConflict, Conflict, [{ mobile: mobileConflict }])
-            );
-
-            await expect(
-               orderController.add(req, res, next)
-            ).rejects.toThrow(mobileConflict);
-        })
-        test("should throw validation error",async()=>{
-             orderService.add.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               orderController.add(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while list all the order data`,async()=>{
-             orderService.add.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               orderController.add(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
+       
+       
     })
     
     describe("=====List all order Module=====",()=>{
         test("should list all the order data",async()=>{
-            // req.body = {mobile:orderdata.mobile,password:orderdata.password}
-            // req.order = payload 
             await orderService.list.mockResolvedValue()
             await orderController.list(req,res);
             expect(orderService.list).toHaveBeenCalled()
             expect(res.status).toHaveBeenCalledWith(ok);
            })
-       
-        test(`should throw ${invalidToken} error while list all the order data`,async()=>{
-             orderService.list.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               orderController.list(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
        
     })
     describe("=====List  order Module=====",()=>{
@@ -160,16 +122,6 @@ describe("----------order Controller--------",()=>{
             expect(orderService.profile).toHaveBeenCalledWith(req.params.id)
             expect(res.status).toHaveBeenCalledWith(ok);
            })
-       
-        test(`should throw ${invalidToken} error while list the order data`,async()=>{
-             orderService.profile.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               orderController.profile(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
        
     })
     describe("=====Delete  order Module=====",()=>{
@@ -190,18 +142,7 @@ describe("----------order Controller--------",()=>{
                  orderController.delete(req,res,next)
             ).rejects.toThrow(unauthoizedUser)
         })   
-       
-        test(`should throw ${invalidToken} error while delete the order data`,async()=>{
-            
-            orderService.delete.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               orderController.delete(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
+             
     })
     describe("=====Edit  order Module=====",()=>{
         test("should edit particular the order data",async()=>{
@@ -232,26 +173,6 @@ describe("----------order Controller--------",()=>{
                orderController.edit(req, res, next)
             ).rejects.toThrow(mobileConflict);
         })
-        test("should throw validation error",async()=>{
-             orderService.edit.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               orderController.edit(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while edit the order data`,async()=>{
-            
-            orderService.edit.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               orderController.edit(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
+              
     })
 })

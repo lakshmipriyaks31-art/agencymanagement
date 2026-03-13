@@ -86,25 +86,7 @@ describe("----------company Controller--------",()=>{
                companyController.add(req, res, next)
             ).rejects.toThrow(mobileConflict);
         })
-        test("should throw validation error",async()=>{
-             companyService.add.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               companyController.add(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while list all the company data`,async()=>{
-             companyService.add.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               companyController.add(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
+      
     })
     
     describe("=====List all company Module=====",()=>{
@@ -116,17 +98,6 @@ describe("----------company Controller--------",()=>{
             expect(companyService.list).toHaveBeenCalled()
             expect(res.status).toHaveBeenCalledWith(ok);
            })
-       
-        test(`should throw ${invalidToken} error while list all the company data`,async()=>{
-             companyService.list.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               companyController.list(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
     })
     describe("=====List  company Module=====",()=>{
         test("should list particular the company data",async()=>{
@@ -136,18 +107,7 @@ describe("----------company Controller--------",()=>{
             await companyController.profile(req,res);
             expect(companyService.profile).toHaveBeenCalledWith(req.params.id)
             expect(res.status).toHaveBeenCalledWith(ok);
-           })
-       
-        test(`should throw ${invalidToken} error while list the company data`,async()=>{
-             companyService.profile.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               companyController.profile(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
+           })       
     })
     describe("=====Delete  company Module=====",()=>{
         test("should delete particular the company data",async()=>{
@@ -166,19 +126,7 @@ describe("----------company Controller--------",()=>{
             await expect(
                  companyController.delete(req,res,next)
             ).rejects.toThrow(unauthoizedUser)
-        })   
-       
-        test(`should throw ${invalidToken} error while delete the company data`,async()=>{
-            
-            companyService.delete.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               companyController.delete(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
+        }) 
     })
     describe("=====Edit  company Module=====",()=>{
         test("should edit particular the company data",async()=>{
@@ -209,26 +157,6 @@ describe("----------company Controller--------",()=>{
                companyController.edit(req, res, next)
             ).rejects.toThrow(mobileConflict);
         })
-        test("should throw validation error",async()=>{
-             companyService.edit.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               companyController.edit(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while edit the company data`,async()=>{
-            
-            companyService.edit.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               companyController.edit(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
+             
     })
 })

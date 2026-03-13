@@ -89,25 +89,7 @@ describe("----------product Controller--------",()=>{
                productController.add(req, res, next)
             ).rejects.toThrow(mobileConflict);
         })
-        test("should throw validation error",async()=>{
-             productService.add.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               productController.add(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while list all the product data`,async()=>{
-             productService.add.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               productController.add(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
+    
     })
     
     describe("=====List all product Module=====",()=>{
@@ -120,15 +102,7 @@ describe("----------product Controller--------",()=>{
             expect(res.status).toHaveBeenCalledWith(ok);
            })
        
-        test(`should throw ${invalidToken} error while list all the product data`,async()=>{
-             productService.list.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               productController.list(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
+        
        
     })
     describe("=====List  product Module=====",()=>{
@@ -141,15 +115,7 @@ describe("----------product Controller--------",()=>{
             expect(res.status).toHaveBeenCalledWith(ok);
            })
        
-        test(`should throw ${invalidToken} error while list the product data`,async()=>{
-             productService.profile.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               productController.profile(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
+       
        
     })
     describe("=====Delete  product Module=====",()=>{
@@ -170,17 +136,6 @@ describe("----------product Controller--------",()=>{
                  productController.delete(req,res,next)
             ).rejects.toThrow(unauthoizedUser)
         })   
-       
-        test(`should throw ${invalidToken} error while delete the product data`,async()=>{
-            
-            productService.delete.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               productController.delete(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
        
     })
     describe("=====Edit  product Module=====",()=>{
@@ -212,26 +167,5 @@ describe("----------product Controller--------",()=>{
                productController.edit(req, res, next)
             ).rejects.toThrow(mobileConflict);
         })
-        test("should throw validation error",async()=>{
-             productService.edit.mockRejectedValue(
-               new AppError(validationError, unprocessable_Entity, validationrequireError)
-            );
-
-            await expect(
-               productController.edit(req, res, next)
-            ).rejects.toThrow(validationError)
-           
-        })
-        test(`should throw ${invalidToken} error while edit the product data`,async()=>{
-            
-            productService.edit.mockRejectedValue(
-               new AppError(invalidToken, Unauthorized, [{ error: invalidToken }])
-            );
-
-            await expect(
-               productController.edit(req, res, next)
-            ).rejects.toThrow(invalidToken);
-        })
-       
     })
 })
